@@ -34,6 +34,20 @@ class Produit
         }
     }
 
+
+    
+    public function One($id){
+        $query = "SELECT * FROM " . $this->table . " WHERE id=:id";
+        try {
+            $stmt = $this->con->prepare($query);
+            $stmt->execute(["id" => $id]);
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        } catch (PDOException $e) {
+            throw new Exception("Error while retrieving products: " . $e->getMessage());
+        }
+    }
+
     public function Add(){
 
         // Ecriture de la requête SQL en y insérant le nom de la table

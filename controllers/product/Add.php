@@ -1,52 +1,47 @@
 <?php
-// Headers requis
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST,GET");
-//header("Access-Control-Max-Age: 3600");
-//header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+include '../../config/access.php';
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    // On inclut les fichiers de configuration et d'accès aux données
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Include configuration and data access files
     include '../../config/Database.php';
     include '../../models/product/Produit.php';
-  
 
-    // On instancie la base de données
-  
+
+    // Instantiate the database
+
     $db = new Database();
     $con = $db->getConnection();
-    // On instancie les produits
+    // Instantiate products
     $produit = new Produit($con);
 
     $contentType = $_SERVER["CONTENT_TYPE"] ?? '';
 
-if (strpos($contentType, 'application/json') !== false) {
-    $data = json_decode(file_get_contents("php://input"));
-} elseif (strpos($contentType, 'application/x-www-form-urlencoded') !== false) {
-    $data = (object) $_POST; // Cast to object if you need it to be an object
-}
-    
+    if (strpos($contentType, 'application/json') !== false) {
+        $data = json_decode(file_get_contents("php://input"));
+    } elseif (strpos($contentType, 'application/x-www-form-urlencoded') !== false) {
+        $data = (object) $_POST; // Convert $_POST array to object
+    }
+
     //echo $data;
-    // validation des données
-    if(!empty($data->nom) && !empty($data->description) && !empty($data->prix) && !empty($data->categories_id)){
-        // Ici on a reçu les données
-        // On hydrate notre objet
+    // Data validation
+    if (!empty($data->nom) && !empty($data->description) && !empty($data->prix) && !empty($data->categories_id)) {
+        // Data received
+        // Hydrate our object
         $produit->nom = $data->nom;
         $produit->description = $data->description;
         $produit->prix = $data->prix;
         $produit->categories_id = $data->categories_id;
         $produit->created_at = $data->created_at;
 
-        if($produit->Add()){
+        if ($produit->Add()) {
             http_response_code(200);
-            echo json_encode(["message" => "L'ajout a été effectué","infoProduit"=>$produit]);
-        }else{
+            echo json_encode(["message" => "The addition was successful", "infoProduit" => $produit]);
+        } else {
             http_response_code(503);
-            echo json_encode(["message" => "L'ajout n'a pas été effectué"]);         
+            echo json_encode(["message" => "The addition was not successful"]);
         }
     }
-}else{
+} else {
     http_response_code(405);
-    echo json_encode(["message" => "La méthode n'est pas autorisée"]);
+    echo json_encode(["message" => "Method not allowed"]);
 }
