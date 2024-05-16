@@ -22,7 +22,7 @@ class Produit
     }
 
     // Method to retrieve all products from the database
-    public function all(){
+    public function All(){
         $query = "SELECT * FROM " . $this->table;
         try {
             $stmt = $this->con->prepare($query);
@@ -30,7 +30,7 @@ class Produit
             $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return $res;
         } catch (PDOException $e) {
-            return "Error while retrieving products: " . $e->getMessage();
+            throw new Exception("Error while retrieving products: " . $e->getMessage());
         }
     }
 

@@ -6,5 +6,5 @@ include("config/database.php");
 $con  = new Database();
 $db = $con->getConnection();
 $produit = new produit($db);
-$produits = $produit->all();
+$produits = $produit->All();
 print_r($produits);
