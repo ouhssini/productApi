@@ -19,8 +19,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     // On instancie les produits
     $produit = new Produit($con);
 
-    // On récupère les informations envoyées
+    $contentType = $_SERVER["CONTENT_TYPE"] ?? '';
+
+if (strpos($contentType, 'application/json') !== false) {
     $data = json_decode(file_get_contents("php://input"));
+} elseif (strpos($contentType, 'application/x-www-form-urlencoded') !== false) {
+    $data = (object) $_POST; // Cast to object if you need it to be an object
+}
     
     //echo $data;
     // validation des données
