@@ -1,0 +1,14 @@
+DirectoryIndex index.php
+RewriteEngine On
+
+#RewriteRule ^category/([a-z]*)/([0-9]+)$ index.php?action=$1&id=$2 [L]
+#RewriteRule ^([a-z]*-[0-9]+)$ index.php?action=$1 [L]
+#RewriteRule ^category/([a-z]*)$ index.php?action=$1 [L]
+#RewriteRule ^([a-z]*)$/([a-z]*)$ index.php?folder=$1&action=$2 [L]
+
+
+#RewriteRule ^([a-z]*)/([a-z]*)$ index.php?folder=$1&action=$2 [L]
+RewriteRule ^([a-z]+)/([a-z]+)(/([0-9]+))?$ index.php?folder=$1&action=$2&id=$4 [L]
+
+
+
